@@ -1,6 +1,7 @@
 <?php
 namespace App\Service;
 
+use App\Entity\Trick;
 use App\Repository\TrickRepository;
 
 class TrickService

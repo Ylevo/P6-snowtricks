@@ -1,0 +1,21 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <main class="page landing-page">
+        <div id="trick_wrapper">
+            {% include('layouts/home_banner.html.twig') %}
+            <div id="trick_container">
+                <h2>{{ trick.name }}</h2>
+                <img class="w-100 d-block fit-cover" alt="{{ trick.mediaCover.altText }}" src="{{ asset('images/tricks/' ~ trick.mediaCover.url) }}" />
+                {#
+                    medias
+                #}
+                <p>{{ trick.description }}</p>
+                <p> Group : {{ trick.category.name }} - Created at : {{ trick.creationDate|date("F j, Y") }} - Last modified on : {{ trick.lastModified|date("F j, Y") }}</p>
+                {#
+                    comments
+                #}
+            </div>
+        </div>
+    </main>
+{% endblock %}

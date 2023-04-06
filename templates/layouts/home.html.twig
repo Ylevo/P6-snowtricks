@@ -2,20 +2,16 @@
 
 {% block body %}
     <main class="page landing-page">
-        <section class="clean-block clean-hero" style="background-image: url({{ asset('images/image4.jpg') }});color: rgba(9, 162, 255, 0.85);">
-            <div class="text">
-                <h2>Lorem ipsum dolor sit amet.</h2>
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc quam urna, dignissim nec auctor in, mattis vitae leo.</p><button class="btn btn-outline-light btn-lg" type="button">Learn More</button>
-            </div>
-        </section>
+        {% include('layouts/home_banner.html.twig') %}
         <section>
             <div class="container py-4 py-xl-5">
                 <div class="row gy-4 row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-5 row-cols-xxl-5">
                     {% for trick in tricks %}
                         <div class="col">
-                            <div class="card"><img class="card-img-top w-100 d-block fit-cover" alt="{{ trick.mediaCover.altText }}" style="height: 150px;" src="{{ asset('images/tricks/' ~ trick.mediaCover.url) }}" />
+                            <div class="card"><img class="card-img-top w-100 d-block fit-cover" alt="{{ trick.mediaCover.altText }}" src="{{ asset('images/tricks/' ~ trick.mediaCover.url) }}" />
                                 <div class="card-body">
-                                    <p class="text-primary d-flex justify-content-around align-items-center card-text mb-0"><a href="#">{{ trick.name }}</a>
+                                    <p class="text-primary d-flex justify-content-around align-items-center card-text mb-0">
+                                        <a href="/trick/{{ trick.slug }}">{{ trick.name }}</a>
                                         {% if is_granted('IS_AUTHENTICATED_FULLY') %}
                                             <i class="far fa-edit"></i>
                                             <i class="far fa-trash-alt"></i>
