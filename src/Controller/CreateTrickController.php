@@ -53,6 +53,9 @@ class CreateTrickController extends AbstractController
                 $imageMedias[$i]->setType($mediaTypeRepository->findOneBy(['name' => 'image']));
                 $trick->addMedia($imageMedias[$i]);
             }
+            foreach ($trick->getVideoMedias() as $videoMedia) {
+                $trick->addMedia($videoMedia);
+            }
 
             $entityManager->persist($trick);
             $entityManager->flush();

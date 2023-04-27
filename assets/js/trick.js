@@ -1,7 +1,6 @@
 $(function() {
     const modalTrickCover = $("#modal-cover");
     const mediaCoverSelect = $("#trick_form_mediaCover");
-    const newImageBtn = $("#new-image-media-btn");
     const mediasListWrapper = $("#medias-list-wrapper");
 
     $(mediaCoverSelect).change(function (){
@@ -19,13 +18,12 @@ $(function() {
         $(modalTrickCover).modal('hide');
     });
 
-    $(newImageBtn).click(function(){
-        const prototype = $(mediasListWrapper).data('image-prototype');
-        const index = $(mediasListWrapper).data('image-index');
-        const newImage = prototype.replace(/__name__/g, index);
-        $(mediasListWrapper).data('image-index', index + 1);
-        $(mediasListWrapper).append(newImage);
-        $(mediasListWrapper).stop().animate({scrollTop: mediasListWrapper[0].scrollHeight}, 800);
+    $("#new-image-media-btn").click(function(){
+        addMediaUsingPrototype('image');
+    });
+
+    $("#new-video-media-btn").click(function(){
+        addMediaUsingPrototype('video');
     });
 
     $(mediasListWrapper).on('click', '.remove-media-entry', function(e) {
@@ -34,5 +32,15 @@ $(function() {
     });
 
     $(mediaCoverSelect).trigger('change');
+
+    function addMediaUsingPrototype(prototypeName)
+    {
+        const prototype = $(mediasListWrapper).data(prototypeName + '-prototype');
+        const index = $(mediasListWrapper).data(prototypeName + '-index');
+        const newMedia = prototype.replace(/__name__/g, index);
+        $(mediasListWrapper).data(prototypeName + '-index', index + 1);
+        $(mediasListWrapper).append(newMedia);
+        $(mediasListWrapper).stop().animate({scrollTop: mediasListWrapper[0].scrollHeight}, 800);
+    }
 
 });

@@ -25,6 +25,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\IsTrue;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
+use Symfony\Component\Validator\Constraints\Regex;
 
 class VideoMediaFormType extends AbstractType
 {
@@ -37,7 +38,12 @@ class VideoMediaFormType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('url', UrlType::class)
+            ->add('url', UrlType::class, [
+                'constraints' => [
+                    new Regex(['pattern' => '(https:\/\/www.youtube.com\/watch\?v=|https:\/\/vimeo.com\/)',
+                        'message' =>  'URL should be of the pattern https://www.youtube.com/watch?v= or https://vimeo.com/'])
+                ]
+            ])
             ->add('altText', TextType::class)
             ->add('type', EntityType::class, [
                 'class' => MediaType::class,

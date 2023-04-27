@@ -22,12 +22,26 @@
                         <div class="carousel-inner">
                             {% for media in trick.medias %}
                                 <div class="carousel-item">
-                                    <a href="{{ asset('images/tricks/' ~ media.url) }}" data-toggle="lightbox"
-                                       data-gallery="carousel">
-                                        <img class="d-block w-100"
-                                             src="{{ asset('images/tricks/thumbnails/' ~ media.url) }}"
-                                             alt="{{ media.url }}"/>
-                                    </a>
+                                {% if media.type.name ==  'image' %}
+                                <a href="{{ asset('images/tricks/' ~ media.url) }}" data-toggle="lightbox"
+                                   data-gallery="carousel">
+                                    <img class="d-block w-100"
+                                         src="{{ asset('images/tricks/thumbnails/' ~ media.url) }}"
+                                         alt="{{ media.altText }}"/>
+                                </a>
+                            {% else %}
+                            <a href="{{ media.url }}" data-toggle="lightbox"
+                               data-gallery="carousel">
+                                <img class="d-block w-100"
+                                {% if media.type.name == 'youtube' %}
+                                    src="{{ 'http://img.youtube.com/vi/' ~ media.url|split('/watch?v=')|last ~ '/default.jpg' }}"
+                                {% elseif media.type.name == 'vimeo' %}
+                                    src="{{ 'https://vumbnail.com/' ~ media.url|split('/')|last ~ '.jpg'}}"
+
+                                {% endif %}
+                                alt="{{ media.altText }}"/>
+                            {% endif %}
+                            </a>
                                 </div>
                             {% endfor %}
                         </div>
@@ -51,7 +65,7 @@
                 <hr>
                 {% if is_granted('IS_AUTHENTICATED_FULLY') %}
                 <div class="d-flex flex-column align-items-center">
-                    <textarea id="comment-textarea"></textarea>
+                    <label for="comment-textarea">New comment</label><textarea id="comment-textarea"></textarea>
                     <button class="btn btn-primary" id="comment-submit-btn" type="button">Leave a comment</button>
                 </div>
                 {% else %}
