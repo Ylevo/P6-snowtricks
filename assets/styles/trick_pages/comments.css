@@ -1,0 +1,50 @@
+#comment-submit-btn {
+  margin-top: 1em;
+}
+
+#comment-textarea {
+  max-width: 500px;
+  width: 100%;
+}
+
+@media (max-width: 550px) {
+  #comment-textarea {
+    width: 85%;
+  }
+}
+
+#comments-list {
+  margin-bottom: 10px;
+  border: none;
+}
+
+.comment-item {
+  padding: 0 30px 10px 22px;
+}
+
+@media (max-width: 500px) {
+  .comment-avatar {
+    display: none;
+  }
+}
+
+.comment-avatar {
+  margin-right: 10px;
+}
+
+.comment-author {
+  padding-bottom: 0;
+  margin-bottom: 4px;
+}
+
+.comment-date {
+  padding-left: 12px;
+  color: #697077;
+}
+
+@media (max-width: 500px) {
+  .comment-content {
+    font-size: 15px;
+  }
+}
+

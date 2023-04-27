@@ -1,0 +1,63 @@
+{% import 'macros/media_macros.html.twig' as mediaMacros %}
+
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <main class="page landing-page">
+        {{ form_start(form) }}
+        <div id="trick-wrapper">
+            {% include('layouts/home_banner.html.twig') %}
+            <div id="trick-container">
+                {{ form_row(form.name, {'attr': {'placeholder': 'Trick Name', 'class': 'text-center'}}) }}
+                <div id="cover-wrapper">
+                    <img id="trick-cover" class="w-100 d-block fit-cover" alt="{{ trick.mediaCover.altText }}"
+                         src="{{ asset('images/tricks/' ~ trick.mediaCover.url) }}"
+                    />
+                    <div class="d-flex justify-content-evenly" id="trick-cover-buttons">
+                        <a href="#" data-bs-target="#modal-cover" data-bs-toggle="modal"><i class="far fa-edit fs-4"></i></a>
+                    </div>
+                </div>
+                <div id="medias-list-wrapper"
+                     data-image-index="{{ form.imageMedias|length > 0 ? form.imageMedias|last.vars.name + 1 : 0 }}"
+                     data-image-prototype="{{ mediaMacros.newImageMedia(form.imageMedias.vars.prototype)|e('html_attr') }}"
+                     data-video-index="{{ form.videoMedias|length > 0 ? form.videoMedias|last.vars.name + 1 : 0 }}"
+                     data-video-prototype="{{ mediaMacros.newVideoMedia(form.videoMedias.vars.prototype)|e('html_attr') }}">
+                    {% for imageMedia in form.imageMedias %}
+                        {{ mediaMacros.newImageMedia(imageMedia) }}
+                    {% endfor %}
+                    {% for videoMedia in form.videoMedias %}
+                        {{ mediaMacros.newImageMedia(imageMedia) }}
+                    {% endfor %}
+                </div>
+                <div class="container" id="edit-trick-wrapper">
+                    <button class="btn btn-primary" id="new-image-media-btn" type="button">Add an image</button>
+                    <button class="btn btn-primary" id="new-video-media-btn" type="button">Add a video</button>
+                    {{ form_row(form.description, {'attr': {'id': 'edit-trick-textarea'} }) }}
+                    {{ form_row(form.category) }}
+                    <div class="d-flex justify-content-end gap-3">
+                        <a class="btn btn-danger" role="button" href="/">Cancel</a>
+                        <button class="btn btn-primary" type="submit">Save</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal fade" role="dialog" tabindex="-1" id="modal-cover">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Change trick's cover</h4><button class="btn-close" type="button" aria-label="Close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body">
+                        {{ form_row(form.mediaCover) }}
+                        <img id="media-preview" alt="{{ form.mediaCover.altText }}" src="https://cdn.bootstrapstudio.io/placeholders/1400x800.png"></div>
+                    <div class="modal-footer">
+                        <button class="btn btn-light" type="button" data-bs-dismiss="modal" id="modal-cover-cancel">Cancel</button>
+                        <button class="btn btn-primary" type="button" id="modal-cover-save">Save</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {{ form_widget(form._token) }}
+        {{ form_end(form, {'render_rest': false}) }}
+    </main>
+{% endblock %}

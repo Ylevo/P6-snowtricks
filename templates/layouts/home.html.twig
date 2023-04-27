@@ -8,7 +8,12 @@
                 <div class="row gy-4 row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-5 row-cols-xxl-5">
                     {% for trick in tricks %}
                         <div class="col">
-                            <div class="card"><img class="card-img-top w-100 d-block fit-cover trick_list_img" alt="{{ trick.mediaCover.altText }}" src="{{ asset('images/tricks/' ~ trick.mediaCover.url) }}" />
+                            <div class="card">
+                                <a href="{{ path('app_trick_show', {
+                                    slug: trick.slug
+                                }) }}">
+                                    <img class="card-img-top w-100 d-block fit-cover trick_list_img" alt="{{ trick.mediaCover.altText }}" src="{{ asset('images/tricks/' ~ trick.mediaCover.url) }}" />
+                                </a>
                                 <div class="card-body">
                                     <p class="text-primary d-flex justify-content-around align-items-center card-text mb-0">
                                         <a href="{{ path('app_trick_show', {

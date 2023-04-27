@@ -1,0 +1,146 @@
+#background {
+  max-height: 750px;
+  width: 100%;
+}
+
+#trick-container, #background {
+  grid-row-start: 1;
+  grid-column-start: 1;
+}
+
+#trick-wrapper {
+  display: grid;
+}
+
+#trick-container {
+  width: 900px;
+  background: white;
+  box-shadow: 1px 1px 13px 6px rgba(33,37,41,0.56);
+  z-index: 10;
+  margin: 2.5% auto 15px;
+}
+
+@media (max-width: 900px) {
+  #trick-container {
+    width: 100%;
+    margin-top: 0;
+  }
+}
+
+#trick-container h2 {
+  text-align: center;
+  padding-top: 5px;
+}
+
+#trick-description, #trick-meta {
+  padding: 20px 20px 0 20px;
+}
+
+#trick-meta {
+  font-size: 16px;
+  font-style: italic;
+  margin-top: 0;
+  color: #6c757d;
+}
+
+@media (max-width:600px) {
+  #trick-meta {
+    flex-direction: column;
+  }
+}
+
+#trick-cover {
+  max-height: 500px;
+}
+
+#trick-cover-buttons {
+}
+
+#cover-wrapper {
+  position: relative;
+}
+
+#trick-cover-buttons {
+  width: 80px;
+  position: absolute;
+  top: 0;
+  right: 0;
+  margin-top: 15px;
+  margin-right: 15px;
+  background: #ffffff;
+  border-style: groove;
+  border-color: black;
+}
+
+#edit-trick-wrapper {
+  margin-bottom: 0;
+  max-width: 700px;
+  padding-bottom: 20px;
+  padding-right: 12px;
+  margin-top: 20px;
+}
+
+#new-media-btn {
+  display: block;
+  margin: 0 auto;
+}
+
+#edit-trick-textarea {
+  margin-top: 15px;
+  width: 100%;
+  max-height: 250px;
+  height: 250px;
+  margin-bottom: 10px;
+}
+
+#media-preview {
+  max-width: 250px;
+  max-height: 250px;
+  height: auto;
+  margin-left: 10px;
+}
+
+@media (max-width: 500px) {
+  #media-preview {
+    max-width: 150px;
+  }
+}
+
+#trick_form_name {
+  margin-bottom: -1rem;
+}
+
+#medias-list-wrapper {
+  max-height: 500px;
+  overflow-y: auto;
+  padding: 20px;
+}
+
+.media-entry span {
+  font-size: 1.25rem;
+  margin-right: 15px;
+}
+
+.media-entry .field {
+  display: flex;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.media-entry .field label {
+  width: 20%;
+}
+
+@media (max-width:650px) {
+  .media-entry .field {
+    display: block;
+  }
+
+  .media-entry .field label {
+    width: 100%;
+  }
+}
+
+.fit-cover {
+  object-fit: cover;
+}
