@@ -30,13 +30,6 @@ class EditTrickController extends AbstractController
                              ImageUploader $imageUploader): Response
     {
         $form = $this->createForm(TrickFormType::class, $trick);
-        try{
-            dump($trick->getImageMedias());
-        }
-        catch (Exception $e)
-        {
-            return dump($trick);
-        }
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
