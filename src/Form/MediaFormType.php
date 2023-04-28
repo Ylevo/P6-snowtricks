@@ -23,6 +23,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\IsTrue;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
+use Symfony\Component\Validator\Constraints\NotNull;
 
 class MediaFormType extends AbstractType
 {
@@ -36,7 +37,9 @@ class MediaFormType extends AbstractType
                 'label' => 'Filename/URL',
                 'disabled' => true
             ])
-            ->add('altText', TextType::class)
+            ->add('altText', TextType::class, [
+                'empty_data' => ''
+            ])
             ->add('type', EntityType::class, [
                 'class' => MediaType::class,
                 'choice_label' => 'name',

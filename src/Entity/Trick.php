@@ -20,10 +20,11 @@ class Trick
     #[ORM\Column]
     private ?int $id = null;
 
-    #[NotBlank]
+    #[Assert\NotBlank(['message' => 'The name is missing.'])]
     #[ORM\Column(length: 255)]
     private ?string $name = null;
 
+    #[Assert\NotBlank(['message' => 'The description is missing.'])]
     #[ORM\Column(type: Types::TEXT)]
     private ?string $description = null;
 
@@ -39,6 +40,7 @@ class Trick
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $lastModified = null;
 
+    #[Assert\NotBlank(['message' => 'The category is missing.'])]
     #[ORM\ManyToOne(inversedBy: 'tricks')]
     #[ORM\JoinColumn(nullable: false)]
     private ?TrickCategory $category = null;
@@ -48,13 +50,17 @@ class Trick
     private ?User $user = null;
 
     #[ORM\OneToMany(mappedBy: 'trick', targetEntity: Comment::class)]
+    #[ORM\OrderBy(['creationDate' => "DESC"])]
     private Collection $comments;
 
+    #[Assert\Valid]
     #[ORM\ManyToMany(targetEntity: Media::class, inversedBy: 'tricks', cascade: ['persist'])]
     private Collection $medias;
 
+    #[Assert\Valid]
     private Collection $imageMedias;
 
+    #[Assert\Valid]
     private Collection $videoMedias;
 
     #[ORM\ManyToOne]

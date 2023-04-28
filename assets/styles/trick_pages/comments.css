@@ -2,14 +2,14 @@
   margin-top: 1em;
 }
 
-#comment-textarea {
+.comment-textarea {
   max-width: 500px;
-  width: 100%;
+  width: 100% !important;
 }
 
 @media (max-width: 550px) {
-  #comment-textarea {
-    width: 85%;
+  .comment-textarea {
+    width: 85% !important;
   }
 }
 

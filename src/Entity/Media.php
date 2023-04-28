@@ -7,6 +7,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 use Gedmo\Mapping\Annotation\Timestampable;
 
 #[ORM\Entity(repositoryClass: MediaRepository::class)]
@@ -17,9 +18,11 @@ class Media
     #[ORM\Column]
     private ?int $id = null;
 
+    #[Assert\NotBlank(['message' => 'Media\'s url or filename is missing.'])]
     #[ORM\Column(length: 255)]
     private ?string $url = null;
 
+    #[Assert\NotBlank(['message' => 'Alternative text is required.'])]
     #[ORM\Column(length: 255)]
     private ?string $altText = null;
 
