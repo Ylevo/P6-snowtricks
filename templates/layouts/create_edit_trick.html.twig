@@ -43,7 +43,10 @@
                     {{ form_row(form.description, {'attr': {'id': 'edit-trick-textarea'} }) }}
                     {{ form_row(form.category) }}
                     <div class="d-flex justify-content-end gap-3">
-                        <a class="btn btn-danger" role="button" href="/">Cancel</a>
+                        <a class="btn btn-danger" role="button"
+                           href="{{ trick.slug is not null ? (path('app_trick_show', { slug: trick.slug })) : '/' }}">
+                            Cancel
+                        </a>
                         <button class="btn btn-primary" type="submit">Save</button>
                     </div>
                 </div>

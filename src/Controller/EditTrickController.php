@@ -8,6 +8,7 @@ use App\Repository\MediaRepository;
 use App\Repository\MediaTypeRepository;
 use App\Service\ImageUploader;
 use App\Service\Thumbnailer;
+use App\Service\TrickService;
 use Doctrine\ORM\EntityManagerInterface;
 use PHPUnit\Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -23,43 +24,34 @@ class EditTrickController extends AbstractController
 {
     #[Route(path: '/edit-trick/{slug}', name: 'app_trick_edit')]
     public function editTrick(Trick $trick,
-                             Request $request,
-                             EntityManagerInterface $entityManager,
-                             MediaRepository $mediaRepository,
-                             MediaTypeRepository $mediaTypeRepository,
-                             ImageUploader $imageUploader): Response
+                              Request $request,
+                              EntityManagerInterface $entityManager,
+                              MediaRepository $mediaRepository,
+                              MediaTypeRepository $mediaTypeRepository,
+                              ImageUploader $imageUploader,
+                              TrickService $trickService): Response
     {
         $form = $this->createForm(TrickFormType::class, $trick);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
-
             $imageMediasListFromForm = $form->get('imageMedias');
-            $imageMedias = $trick->getImageMedias();
-            $imageType = $mediaTypeRepository->findOneBy(['name' => 'image']);
-            for ($i = 0; $i < sizeof($imageMediasListFromForm); $i++) {
-                $newImage = $imageMediasListFromForm[$i]->get('image')->getData();
-                try {
-                    $fileName = $imageUploader->upload($newImage);
-                } catch (FileException $e) {
-                    $this->addFlash('error', 'Uploading one of the files has failed.');
-                    return $this->redirectToRoute('app_trick_show', ['slug' => $trick->getSlug()]);
-                }
-                $imageMedias[$i]->setUrl($fileName);
-                $imageMedias[$i]->setType($imageType);
-                $trick->addMedia($imageMedias[$i]);
+
+            try {
+                $trickService->handleImageMedias($trick, $imageMediasListFromForm);
+            }
+            catch (FileException $e) {
+                $this->addFlash('error', 'Uploading one of the files has failed.');
+                return $this->redirectToRoute('app_trick_show', ['slug' => $trick->getSlug()]);
             }
 
-            foreach ($trick->getVideoMedias() as $videoMedia) {
-                $trick->addMedia($videoMedia);
-            }
+            $trickService->handleVideoMedias($trick);
 
             $entityManager->persist($trick);
             $entityManager->flush();
 
             $this->addFlash('success', 'Modifications to "'.$trick->getName().'" successfully saved.');
-
             return $this->redirectToRoute('app_trick_show', ['slug' => $trick->getSlug()]);
         }
 
