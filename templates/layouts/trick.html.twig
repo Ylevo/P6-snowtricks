@@ -2,6 +2,9 @@
 
 {% block body %}
     <main class="page landing-page">
+        {% for flash_success in app.flashes('success') %}
+            <div class="alert alert-success" role="alert">{{ flash_success }}</div>
+        {% endfor %}
         <div id="trick-wrapper">
             {% include('layouts/home_banner.html.twig') %}
             <div id="trick-container">
@@ -12,7 +15,7 @@
                     />
                     {% if is_granted('IS_AUTHENTICATED_FULLY') %}
                         <div class="d-flex justify-content-evenly" id="trick-cover-buttons">
-                            <a href="#"><i class="far fa-edit fs-4"></i></a>
+                            <a href="{{ path('app_trick_edit', { slug: trick.slug }) }}"><i class="far fa-edit fs-4"></i></a>
                             <a href="#"><i class="far fa-trash-alt fs-4"></i></a>
                         </div>
                     {% endif %}
