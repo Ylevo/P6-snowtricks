@@ -37,6 +37,7 @@ class EditTrickController extends AbstractController
 
             $imageMediasListFromForm = $form->get('imageMedias');
             $imageMedias = $trick->getImageMedias();
+            $imageType = $mediaTypeRepository->findOneBy(['name' => 'image']);
             for ($i = 0; $i < sizeof($imageMediasListFromForm); $i++) {
                 $newImage = $imageMediasListFromForm[$i]->get('image')->getData();
                 try {
@@ -46,17 +47,18 @@ class EditTrickController extends AbstractController
                     return $this->redirectToRoute('app_trick_show', ['slug' => $trick->getSlug()]);
                 }
                 $imageMedias[$i]->setUrl($fileName);
-                $imageMedias[$i]->setType($mediaTypeRepository->findOneBy(['name' => 'image']));
+                $imageMedias[$i]->setType($imageType);
                 $trick->addMedia($imageMedias[$i]);
             }
+
             foreach ($trick->getVideoMedias() as $videoMedia) {
                 $trick->addMedia($videoMedia);
             }
 
-            $this->addFlash('success', 'Modifications to "'.$trick->getName().'" successfully saved.');
-
             $entityManager->persist($trick);
             $entityManager->flush();
+
+            $this->addFlash('success', 'Modifications to "'.$trick->getName().'" successfully saved.');
 
             return $this->redirectToRoute('app_trick_show', ['slug' => $trick->getSlug()]);
         }
