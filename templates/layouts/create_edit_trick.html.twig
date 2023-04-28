@@ -22,9 +22,9 @@
                 </div>
                 <div id="medias-list-wrapper"
                      data-image-index="{{ form.imageMedias|length > 0 ? form.imageMedias|last.vars.name + 1 : 0 }}"
-                     data-image-prototype="{{ mediaMacros.newImageMedia(form.imageMedias.vars.prototype)|e('html_attr') }}"
+                     data-image-prototype="{{ mediaMacros.newMedia(form.imageMedias.vars.prototype, true, 'image')|e('html_attr') }}"
                      data-video-index="{{ form.videoMedias|length > 0 ? form.videoMedias|last.vars.name + 1 : 0 }}"
-                     data-video-prototype="{{ mediaMacros.newVideoMedia(form.videoMedias.vars.prototype)|e('html_attr') }}">
+                     data-video-prototype="{{ mediaMacros.newMedia(form.videoMedias.vars.prototype, 'true', 'video')|e('html_attr') }}">
                     {% for media in form.medias %}
                        {{ mediaMacros.newMedia(media, false, media.type.vars.data.name) }}
                     {% endfor %}
