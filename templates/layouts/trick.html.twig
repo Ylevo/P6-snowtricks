@@ -16,7 +16,11 @@
                     {% if is_granted('IS_AUTHENTICATED_FULLY') %}
                         <div class="d-flex justify-content-evenly" id="trick-cover-buttons">
                             <a href="{{ path('app_trick_edit', { slug: trick.slug }) }}"><i class="far fa-edit fs-4"></i></a>
-                            <a href="#"><i class="far fa-trash-alt fs-4"></i></a>
+                            <a class="delete-trick-button" href="#" data-bs-target="#modal-delete"
+                               data-bs-toggle="modal"
+                               data-url="{{ path('app_trick_delete', { slug: trick.slug }) }}">
+                                <i class="far fa-trash-alt fs-4"></i>
+                            </a>
                         </div>
                     {% endif %}
                 </div>
@@ -99,5 +103,8 @@
                 </div>
             </div>
         </div>
+        {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+            {% include 'layouts/modals/delete_trick_modal.html.twig' %}
+        {% endif %}
     </main>
 {% endblock %}

@@ -18,3 +18,7 @@ img.trick_list_img {
 .fit-cover {
     object-fit: cover;
 }
+
+a {
+    text-decoration: none !important;
+}
