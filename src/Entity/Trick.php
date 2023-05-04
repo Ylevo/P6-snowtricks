@@ -10,6 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation\Slug;
 use Gedmo\Mapping\Annotation\Timestampable;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Serializer\Annotation\MaxDepth;
 use Symfony\Component\Validator\Constraints\NotBlank;
 
 #[ORM\Entity(repositoryClass: TrickRepository::class)]
@@ -41,19 +42,23 @@ class Trick
     private ?\DateTimeInterface $lastModified = null;
 
     #[Assert\NotBlank(['message' => 'The category is missing.'])]
+    #[MaxDepth(1)]
     #[ORM\ManyToOne(inversedBy: 'tricks')]
     #[ORM\JoinColumn(nullable: false)]
     private ?TrickCategory $category = null;
 
     #[ORM\ManyToOne(inversedBy: 'tricks')]
+    #[MaxDepth(1)]
     #[ORM\JoinColumn(nullable: false)]
     private ?User $user = null;
 
+    #[MaxDepth(1)]
     #[ORM\OneToMany(mappedBy: 'trick', targetEntity: Comment::class)]
     #[ORM\OrderBy(['creationDate' => "DESC"])]
     private Collection $comments;
 
     #[Assert\Valid]
+    #[MaxDepth(1)]
     #[ORM\ManyToMany(targetEntity: Media::class, inversedBy: 'tricks', cascade: ['persist'])]
     private Collection $medias;
 
@@ -63,6 +68,7 @@ class Trick
     #[Assert\Valid]
     private Collection $videoMedias;
 
+    #[MaxDepth(2)]
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: true)]
     private ?Media $mediaCover = null;

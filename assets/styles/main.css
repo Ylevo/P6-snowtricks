@@ -3,6 +3,10 @@
     width: 100%;
 }
 
+#more-tricks-alert{
+    display: none;
+}
+
 img.trick_list_img {
     max-height: 125px;
 }
@@ -21,4 +25,9 @@ img.trick_list_img {
 
 a {
     text-decoration: none !important;
+}
+
+#loading-spinner{
+    display: none;
+    width: 80px;
 }

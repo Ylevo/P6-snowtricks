@@ -39,16 +39,6 @@ class TrickRepository extends ServiceEntityRepository
         }
     }
 
-    public function findSome(int $offset = 0, int $limit = 15) : array
-    {
-        return $this->createQueryBuilder('t')
-                    ->orderBy('t.id', 'ASC')
-                    ->setFirstResult($offset)
-                    ->setMaxResults($limit)
-                    ->getQuery()
-                    ->getResult();
-    }
-
 //    /**
 //     * @return Trick[] Returns an array of Trick objects
 //     */
