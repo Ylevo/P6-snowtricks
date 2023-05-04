@@ -53,7 +53,7 @@ class Trick
     private ?User $user = null;
 
     #[MaxDepth(1)]
-    #[ORM\OneToMany(mappedBy: 'trick', targetEntity: Comment::class)]
+    #[ORM\OneToMany(mappedBy: 'trick', targetEntity: Comment::class, fetch: 'EXTRA_LAZY')]
     #[ORM\OrderBy(['creationDate' => "DESC"])]
     private Collection $comments;
 
@@ -68,7 +68,7 @@ class Trick
     #[Assert\Valid]
     private Collection $videoMedias;
 
-    #[MaxDepth(2)]
+    #[MaxDepth(1)]
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: true)]
     private ?Media $mediaCover = null;
@@ -171,11 +171,11 @@ class Trick
     }
 
     /**
-     * @return Collection<int, Comment>
+     * @return array
      */
-    public function getComments(): Collection
+    public function getComments(): array
     {
-        return $this->comments;
+        return $this->comments->slice(0, 5);
     }
 
     public function addComment(Comment $comment): self

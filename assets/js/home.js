@@ -7,9 +7,8 @@ $(function() {
             {
                 dataType: 'json',
                 success: function (data) {
-                    let tricks = data.tricks;
                     let isLoggedIn = data.isLoggedIn;
-                    $.each(tricks, function(index, trick){
+                    $.each(data.tricks, function(index, trick){
                         $("#tricks-list").append(`
                         <div class="col">
                             <div class="card">

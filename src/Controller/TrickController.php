@@ -36,12 +36,14 @@ class TrickController extends AbstractController
                 $entityManager->flush();
 
                 $this->addFlash('success', 'New comment successfully added.');
+
                 return $this->redirectToRoute('app_trick_show', ['slug' => $trick->getSlug()]);
             }
 
             return $this->render('layouts/trick.html.twig',
                 ['trick' => $trick, 'form' => $form]);
         }
+
         return $this->render('layouts/trick.html.twig',
             ['trick' => $trick]);
     }

@@ -86,7 +86,7 @@
                 <div class="card" id="comments-list">
                     {% for comment in trick.comments %}
                         <div class="d-flex comment-item">
-                            <img class="rounded-circle comment-avatar" src="{{ asset('images/avatar_placeholder.png') }}" alt="avatar" width="72" height="72" />
+                            <img class="rounded-circle comment-avatar" src="{{ asset('images/avatar_placeholder.png') }}" alt="avatar" />
                             <div class="row text-end d-flex">
                                 <div class="col-xl-12 d-flex align-items-center">
                                     <h4 class="comment-author text-start">{{ comment.user.firstName ~ ' ' ~ comment.user.lastName }}</h4>
@@ -101,6 +101,15 @@
                         </div>
                     {% endfor %}
                 </div>
+                {% if trick.comments|length >= 5 %}
+                    <div class="d-flex flex-column justify-content-center align-items-center mt-3 mb-3">
+                        <img id="loading-spinner" class="mb-3" alt="Loading spinner" src="{{ asset('images/spinner.gif') }}"/>
+                        <button class="btn btn-primary" id="more-comments-btn" data-page="1" data-slug="{{ trick.slug }}" type="submit">See more comments</button>
+                    </div>
+                    <div class="alert alert-danger" role="alert" id="more-comments-alert">
+                        <span><strong>Error : </strong> unable to load more comments.</span>
+                    </div>
+                {% endif %}
             </div>
         </div>
         {% if is_granted('IS_AUTHENTICATED_FULLY') %}
