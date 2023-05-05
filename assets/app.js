@@ -8,6 +8,7 @@
 // any CSS you import will output into a single css file (app.scss in this case)
 import './styles/app.scss';
 require('bs5-lightbox');
+import './js/home';
 import './js/carousel';
 import './js/trick';
 // start the Stimulus application
