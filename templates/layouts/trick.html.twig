@@ -1,5 +1,7 @@
 {% extends 'base.html.twig' %}
 
+{% block title %}Snowtricks - {{ trick.name }}{% endblock %}
+
 {% block body %}
     <main class="page landing-page">
         {% for flash_success in app.flashes('success') %}

@@ -3,6 +3,12 @@
   grid-column-start: 1;
 }
 
+@media (max-width: 900px) {
+  #tricks-list {
+    scroll-margin-top: 100px;
+  }
+}
+
 #trick-wrapper {
   display: grid;
 }

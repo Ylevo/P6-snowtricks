@@ -1,6 +1,9 @@
-<section id="background" class="clean-block clean-hero" style="background-image: url({{ asset('images/image4.jpg') }});color: rgba(9, 162, 255, 0.85);">
+<section id="background" class="clean-block clean-hero">
     <div class="text">
-        <h2>Lorem ipsum dolor sit amet.</h2>
-        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc quam urna, dignissim nec auctor in, mattis vitae leo.</p><button class="btn btn-outline-light btn-lg" type="button">Learn More</button>
+        <h2>Welcome to Snowtricks</h2>
+        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc quam urna, dignissim nec auctor in, mattis vitae leo.</p>
     </div>
+    {% if tricks is defined %}
+        <i id="goToTricksArrow" class="fas fa-arrow-down fs-1 text-light"></i>
+    {% endif %}
 </section>

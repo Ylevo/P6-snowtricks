@@ -1,0 +1,19 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Snowtricks - Reset your password{% endblock %}
+
+{% block body %}
+    <main class="page">
+        <section class="clean-block clean-form dark">
+            <div class="container">
+                <div class="block-heading">
+                    <h2 class="text-info">Reset your password</h2>
+                </div>
+                {{ form_start(resetForm) }}
+                {{ form_row(resetForm.plainPassword) }}
+                <button class="btn btn-primary">Reset password</button>
+                {{ form_end(resetForm) }}
+            </div>
+        </section>
+    </main>
+{% endblock %}
