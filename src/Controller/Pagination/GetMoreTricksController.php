@@ -20,7 +20,7 @@ class GetMoreTricksController extends AbstractController
         $moreTricks = $trickRepository->findBy([],['creationDate' => 'ASC'], 10, ($page * 10));
         $data = $serializer->normalize($moreTricks, null, [
             'enable_max_depth' => true,
-            'circular_reference_handler' => function ($object) {
+            'circular_reference_handler' => function (mixed $object) {
                 return $object->getId();
             },
         ]);

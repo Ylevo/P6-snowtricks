@@ -19,7 +19,8 @@ class TrickService {
     {
         $imageMedias = $trick->getImageMedias();
         $imageType = $this->mediaTypeRepository->findOneBy(['name' => 'image']);
-        for ($i = 0; $i < sizeof($imageMediasListFromForm); $i++) {
+        $sizeOfMediaList = sizeof($imageMediasListFromForm);
+        for ($i = 0; $i < $sizeOfMediaList; $i++) {
             $newImage = $imageMediasListFromForm[$i]->get('image')->getData();
             $fileName = $this->imageUploader->upload($newImage);
             $imageMedias[$i]->setUrl($fileName);
