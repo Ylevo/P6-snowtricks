@@ -2,6 +2,9 @@
 
 {% block body %}
     <main class="page landing-page">
+        {% for flash_success in app.flashes('success') %}
+            <div class="alert alert-success" role="alert">{{ flash_success }}</div>
+        {% endfor %}
         {% include('layouts/home_banner.html.twig') %}
         <section>
             <div class="container py-4 py-xl-5">
@@ -18,8 +21,14 @@
                                     <p class="text-primary d-flex justify-content-around align-items-center card-text mb-0">
                                         <a href="{{ path('app_trick_show', { slug: trick.slug }) }}">{{ trick.name }}</a>
                                         {% if is_granted('IS_AUTHENTICATED_FULLY') %}
-                                            <a href="{{ path('app_trick_edit', { slug: trick.slug }) }}"><i class="far fa-edit"></i></a>
-                                            <i class="far fa-trash-alt"></i>
+                                            <span class="d-flex gap-2">
+                                                <a href="{{ path('app_trick_edit', { slug: trick.slug }) }}"><i class="far fa-edit"></i></a>
+                                                <a class="delete-trick-button" href="#" data-bs-target="#modal-delete"
+                                                   data-bs-toggle="modal"
+                                                   data-url="{{ path('app_trick_delete', { slug: trick.slug }) }}">
+                                                    <i class="far fa-trash-alt"></i>
+                                                </a>
+                                            </span>
                                         {% endif %}
                                     </p>
                                 </div>
@@ -29,5 +38,8 @@
                 </div>
             </div>
         </section>
+        {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+            {% include 'layouts/modals/delete_trick_modal.html.twig' %}
+        {% endif %}
     </main>
 {% endblock %}

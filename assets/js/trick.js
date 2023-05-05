@@ -31,6 +31,11 @@ $(function() {
         $(this).closest(".media-entry").fadeOut().remove();
     });
 
+    $("a.delete-trick-button").click(function(){
+        let url = $(this).data('url');
+        $("#modal-delete-confirm").prop('href', url);
+    })
+
     $(mediaCoverSelect).trigger('change');
 
     function addMediaUsingPrototype(prototypeName)
