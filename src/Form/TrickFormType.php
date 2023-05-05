@@ -61,20 +61,19 @@ class TrickFormType extends AbstractType
             ->add('imageMedias', CollectionType::class, [
                 'entry_type' => ImageMediaFormType::class,
                 'entry_options' => ['label' => false],
-                'allow_add' => true
+                'allow_add' => true,
             ])
             ->add('videoMedias', CollectionType::class, [
                 'entry_type' => VideoMediaFormType::class,
                 'entry_options' => ['label' => false],
                 'allow_add' => true
             ])
-            /*
             ->add('medias', CollectionType::class, [
                 'entry_type' => MediaFormType::class,
                 'entry_options' => ['label' => false],
-                'allow_add' => true,
+                'allow_delete' => true,
                 'by_reference' => false
-            ]);*/
+            ]);
         ;
     }
 

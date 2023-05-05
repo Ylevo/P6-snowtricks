@@ -1,36 +1,19 @@
-{% macro newImageMedia(media) %}
+{% macro newMedia(media, isNewMedia, mediaType) %}
     <div class="media-entry">
-        <span>New Image Media</span>
-        <a href="#" class="remove-media-entry">
-            <i class="far fa-trash-alt fs-5"></i>
-        </a>
-        <div class="field align-items-center">
-            {{ form_label(media.image) }} {{ form_widget(media.image) }}
-        </div>
-        {{ form_errors(media.image) }}
-        <div class="field align-items-center">
-            {{ form_label(media.altText) }} {{ form_widget(media.altText) }}
-        </div>
-        <hr>
-    </div>
-{% endmacro %}
+        <span>{{ isNewMedia ? 'New ' : '' }}{{ mediaType == 'image' ? 'Image ' : 'Video ' }}Media</span>
+        <a href="#" class="remove-media-entry"><i class="far fa-trash-alt fs-5"></i></a>
 
-{% macro newVideoMedia(media) %}
-    <div class="media-entry">
-        <span>New Video Media</span>
-        <a href="#" class="remove-media-entry">
-            <i class="far fa-trash-alt fs-5"></i>
-        </a>
-        <div class="field align-items-center">
-            {{ form_label(media.url) }} {{ form_widget(media.url) }}
-        </div>
-        {{ form_errors(media.url) }}
-        <div class="field align-items-center">
-            {{ form_label(media.altText) }} {{ form_widget(media.altText) }}
-        </div>
-        <div class="field align-items-center">
-            {{ form_label(media.type) }} {{ form_widget(media.type) }}
-        </div>
+        {% if (mediaType == 'image' and isNewMedia) %}
+            <div class="field align-items-center"> {{ form_label(media.image) }} {{ form_widget(media.image) }} </div>
+            {{ form_errors(media.image) }}
+            <div class="field align-items-center"> {{ form_label(media.altText) }} {{ form_widget(media.altText) }} </div>
+        {% else %}
+            <div class="field align-items-center"> {{ form_label(media.url) }} {{ form_widget(media.url) }} </div>
+            {{ form_errors(media.url) }}
+            <div class="field align-items-center"> {{ form_label(media.altText) }} {{ form_widget(media.altText) }} </div>
+            <div class="field align-items-center"> {{ form_label(media.type) }} {{ form_widget(media.type) }} </div>
+        {% endif %}
+
         <hr>
     </div>
 {% endmacro %}

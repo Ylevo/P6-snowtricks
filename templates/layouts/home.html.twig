@@ -16,11 +16,9 @@
                                 </a>
                                 <div class="card-body">
                                     <p class="text-primary d-flex justify-content-around align-items-center card-text mb-0">
-                                        <a href="{{ path('app_trick_show', {
-                                            slug: trick.slug
-                                        }) }}">{{ trick.name }}</a>
+                                        <a href="{{ path('app_trick_show', { slug: trick.slug }) }}">{{ trick.name }}</a>
                                         {% if is_granted('IS_AUTHENTICATED_FULLY') %}
-                                            <i class="far fa-edit"></i>
+                                            <a href="{{ path('app_trick_edit', { slug: trick.slug }) }}"><i class="far fa-edit"></i></a>
                                             <i class="far fa-trash-alt"></i>
                                         {% endif %}
                                     </p>

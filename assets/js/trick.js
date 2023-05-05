@@ -4,7 +4,7 @@ $(function() {
     const mediasListWrapper = $("#medias-list-wrapper");
 
     $(mediaCoverSelect).change(function (){
-        $("#media-preview").attr('src', 'images/tricks/thumbnails/' + $("option:selected", this).text());
+        $("#media-preview").attr('src', '/images/tricks/thumbnails/' + $("option:selected", this).text());
     });
 
     $("#modal-cover-cancel").click(function(){
@@ -14,7 +14,7 @@ $(function() {
     });
 
     $("#modal-cover-save").click(function(){
-        $("#trick-cover").attr('src', 'images/tricks/' + $("option:selected", mediaCoverSelect).text());
+        $("#trick-cover").attr('src', '/images/tricks/' + $("option:selected", mediaCoverSelect).text());
         $(modalTrickCover).modal('hide');
     });
 

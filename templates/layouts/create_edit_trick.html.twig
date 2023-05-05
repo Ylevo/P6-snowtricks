@@ -4,6 +4,9 @@
 
 {% block body %}
     <main class="page landing-page">
+        {% for flash_error in app.flashes('error') %}
+            <div class="alert alert-danger" role="alert">{{ flash_error }}</div>
+        {% endfor %}
         {{ form_start(form) }}
         <div id="trick-wrapper">
             {% include('layouts/home_banner.html.twig') %}
@@ -19,14 +22,17 @@
                 </div>
                 <div id="medias-list-wrapper"
                      data-image-index="{{ form.imageMedias|length > 0 ? form.imageMedias|last.vars.name + 1 : 0 }}"
-                     data-image-prototype="{{ mediaMacros.newImageMedia(form.imageMedias.vars.prototype)|e('html_attr') }}"
+                     data-image-prototype="{{ mediaMacros.newMedia(form.imageMedias.vars.prototype, true, 'image')|e('html_attr') }}"
                      data-video-index="{{ form.videoMedias|length > 0 ? form.videoMedias|last.vars.name + 1 : 0 }}"
-                     data-video-prototype="{{ mediaMacros.newVideoMedia(form.videoMedias.vars.prototype)|e('html_attr') }}">
+                     data-video-prototype="{{ mediaMacros.newMedia(form.videoMedias.vars.prototype, 'true', 'video')|e('html_attr') }}">
+                    {% for media in form.medias %}
+                       {{ mediaMacros.newMedia(media, false, media.type.vars.data.name) }}
+                    {% endfor %}
                     {% for imageMedia in form.imageMedias %}
-                        {{ mediaMacros.newImageMedia(imageMedia) }}
+                        {{ mediaMacros.newMedia(imageMedia, true, 'image') }}
                     {% endfor %}
                     {% for videoMedia in form.videoMedias %}
-                        {{ mediaMacros.newVideoMedia(videoMedia) }}
+                        {{ mediaMacros.newMedia(videoMedia, true, 'video') }}
                     {% endfor %}
                 </div>
                 <div class="container" id="edit-trick-wrapper">
@@ -37,7 +43,10 @@
                     {{ form_row(form.description, {'attr': {'id': 'edit-trick-textarea'} }) }}
                     {{ form_row(form.category) }}
                     <div class="d-flex justify-content-end gap-3">
-                        <a class="btn btn-danger" role="button" href="/">Cancel</a>
+                        <a class="btn btn-danger" role="button"
+                           href="{{ trick.slug is not null ? (path('app_trick_show', { slug: trick.slug })) : '/' }}">
+                            Cancel
+                        </a>
                         <button class="btn btn-primary" type="submit">Save</button>
                     </div>
                 </div>

@@ -29,18 +29,16 @@ use Symfony\Component\Validator\Constraints\Regex;
 
 class VideoMediaFormType extends AbstractType
 {
-    private MediaTypeRepository $mediaTypeRepository;
 
-    public function __construct(MediaTypeRepository $mediaTypeRepository)
-    {
-        $this->mediaTypeRepository = $mediaTypeRepository;
+    public function __construct(private MediaTypeRepository $mediaTypeRepository
+    ){
     }
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
             ->add('url', UrlType::class, [
                 'constraints' => [
-                    new Regex(['pattern' => '(https:\/\/www.youtube.com\/watch\?v=|https:\/\/vimeo.com\/)',
+                    new Regex(['pattern' => '(https:\/\/(www.)?youtube.com\/watch\?v=|https:\/\/vimeo.com\/)',
                         'message' =>  'URL should be of the pattern https://www.youtube.com/watch?v= or https://vimeo.com/'])
                 ]
             ])

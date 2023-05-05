@@ -214,6 +214,9 @@ class Trick
 
     public function getImageMedias(): Collection
     {
+        if (!isset($this->imageMedias)) {
+            $this->imageMedias = new ArrayCollection();
+        }
         return $this->imageMedias;
     }
 
@@ -235,6 +238,9 @@ class Trick
 
     public function getVideoMedias(): Collection
     {
+        if (!isset($this->videoMedias)) {
+            $this->videoMedias = new ArrayCollection();
+        }
         return $this->videoMedias;
     }
 

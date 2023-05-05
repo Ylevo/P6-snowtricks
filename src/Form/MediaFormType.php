@@ -8,6 +8,7 @@ use App\Entity\Trick;
 use App\Entity\TrickCategory;
 use App\Entity\User;
 use App\Repository\MediaRepository;
+use App\Repository\MediaTypeRepository;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\ChoiceList\ChoiceList;
@@ -25,14 +26,22 @@ use Symfony\Component\Validator\Constraints\NotBlank;
 
 class MediaFormType extends AbstractType
 {
+    public function __construct(private MediaTypeRepository $mediaTypeRepository
+    ){
+    }
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('url', HiddenType::class)
-            ->add('altText', HiddenType::class)
+            ->add('url', TextType::class, [
+                'label' => 'Filename/URL',
+                'disabled' => true
+            ])
+            ->add('altText', TextType::class)
             ->add('type', EntityType::class, [
                 'class' => MediaType::class,
-                'choice_label' => 'name'
+                'choice_label' => 'name',
+                'choices' => $this->mediaTypeRepository->findAll(),
+                'label' => 'Media Type'
             ])
         ;
     }
