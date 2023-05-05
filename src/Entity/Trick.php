@@ -7,6 +7,10 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Mapping\Annotation\Slug;
+use Gedmo\Mapping\Annotation\Timestampable;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Validator\Constraints\NotBlank;
 
 #[ORM\Entity(repositoryClass: TrickRepository::class)]
 class Trick
@@ -16,18 +20,22 @@ class Trick
     #[ORM\Column]
     private ?int $id = null;
 
+    #[NotBlank]
     #[ORM\Column(length: 255)]
     private ?string $name = null;
 
     #[ORM\Column(type: Types::TEXT)]
     private ?string $description = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 255, unique: true)]
+    #[Slug(fields: ['name'])]
     private ?string $slug = null;
 
+    #[Timestampable(on: 'create')]
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $creationDate = null;
 
+    #[Timestampable(on: 'update')]
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $lastModified = null;
 
@@ -42,17 +50,23 @@ class Trick
     #[ORM\OneToMany(mappedBy: 'trick', targetEntity: Comment::class)]
     private Collection $comments;
 
-    #[ORM\ManyToMany(targetEntity: Media::class, inversedBy: 'tricks')]
+    #[ORM\ManyToMany(targetEntity: Media::class, inversedBy: 'tricks', cascade: ['persist'])]
     private Collection $medias;
 
+    private Collection $imageMedias;
+
+    private Collection $videoMedias;
+
     #[ORM\ManyToOne]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(nullable: true)]
     private ?Media $mediaCover = null;
 
     public function __construct()
     {
         $this->comments = new ArrayCollection();
         $this->medias = new ArrayCollection();
+        $this->imageMedias = new ArrayCollection();
+        $this->videoMedias = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -194,6 +208,48 @@ class Trick
     public function removeMedia(Media $media): self
     {
         $this->medias->removeElement($media);
+
+        return $this;
+    }
+
+    public function getImageMedias(): Collection
+    {
+        return $this->imageMedias;
+    }
+
+    public function addImageMedia(Media $media): self
+    {
+        if (!$this->imageMedias->contains($media)) {
+            $this->imageMedias->add($media);
+        }
+
+        return $this;
+    }
+
+    public function removeImageMedia(Media $media): self
+    {
+        $this->imageMedias->removeElement($media);
+
+        return $this;
+    }
+
+    public function getVideoMedias(): Collection
+    {
+        return $this->videoMedias;
+    }
+
+    public function addVideoMedia(Media $media): self
+    {
+        if (!$this->videoMedias->contains($media)) {
+            $this->videoMedias->add($media);
+        }
+
+        return $this;
+    }
+
+    public function removeVideoMedia(Media $media): self
+    {
+        $this->videoMedias->removeElement($media);
 
         return $this;
     }

@@ -1,0 +1,96 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <main class="page landing-page">
+        <div id="trick-wrapper">
+            {% include('layouts/home_banner.html.twig') %}
+            <div id="trick-container">
+                <h2>{{ trick.name }}</h2>
+                <div id="cover-wrapper">
+                    <img id="trick-cover" class="w-100 d-block fit-cover" alt="{{ trick.mediaCover.altText }}"
+                         src="{{ trick.mediaCover.url is not null ? asset('images/tricks/' ~ trick.mediaCover.url) : asset('images/tricks/default_cover.jpeg') }}"
+                    />
+                    {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+                        <div class="d-flex justify-content-evenly" id="trick-cover-buttons">
+                            <a href="#"><i class="far fa-edit fs-4"></i></a>
+                            <a href="#"><i class="far fa-trash-alt fs-4"></i></a>
+                        </div>
+                    {% endif %}
+                </div>
+                {% if trick.medias is not empty %}
+                    <div class="carousel carousel-dark" data-bs-ride="false" id="trick-carousel">
+                        <div class="carousel-inner">
+                            {% for media in trick.medias %}
+                                <div class="carousel-item">
+                                {% if media.type.name ==  'image' %}
+                                <a href="{{ asset('images/tricks/' ~ media.url) }}" data-toggle="lightbox"
+                                   data-gallery="carousel">
+                                    <img class="d-block w-100"
+                                         src="{{ asset('images/tricks/thumbnails/' ~ media.url) }}"
+                                         alt="{{ media.altText }}"/>
+                                </a>
+                            {% else %}
+                            <a href="{{ media.url }}" data-toggle="lightbox"
+                               data-gallery="carousel">
+                                <img class="d-block w-100"
+                                {% if media.type.name == 'youtube' %}
+                                    src="{{ 'http://img.youtube.com/vi/' ~ media.url|split('/watch?v=')|last ~ '/default.jpg' }}"
+                                {% elseif media.type.name == 'vimeo' %}
+                                    src="{{ 'https://vumbnail.com/' ~ media.url|split('/')|last ~ '.jpg'}}"
+
+                                {% endif %}
+                                alt="{{ media.altText }}"/>
+                            {% endif %}
+                            </a>
+                                </div>
+                            {% endfor %}
+                        </div>
+                        <div>
+                            <a class="carousel-control-prev" href="#trick-carousel" role="button" data-bs-slide="prev">
+                                <span class="carousel-control-prev-icon"></span>
+                                <span class="visually-hidden">Previous</span></a>
+                            <a class="carousel-control-next" href="#trick-carousel" role="button" data-bs-slide="next">
+                                <span class="carousel-control-next-icon"></span>
+                                <span class="visually-hidden">Next</span>
+                            </a>
+                        </div>
+                    </div>
+                {% endif %}
+                <p id="trick-description">{{ trick.description }}</p>
+                <p class="d-flex justify-content-around" id="trick-meta">
+                    <span>Category : {{ trick.category.name }}</span>
+                    <span>Created at : {{ trick.creationDate|date("F j, Y") }}</span>
+                    <span>Last modified on : {{ trick.lastModified|date("F j, Y") }}</span>
+                </p>
+                <hr>
+                {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+                <div class="d-flex flex-column align-items-center">
+                    <label for="comment-textarea">New comment</label><textarea id="comment-textarea"></textarea>
+                    <button class="btn btn-primary" id="comment-submit-btn" type="button">Leave a comment</button>
+                </div>
+                {% else %}
+                    <p class="text-center">You need to be&nbsp;<a href="/login">logged in</a>&nbsp;to comment.</p>
+                {% endif %}
+                <hr>
+                <div class="card" id="comments-list">
+                    {% for comment in trick.comments %}
+                        <div class="d-flex comment-item">
+                            <img class="rounded-circle comment-avatar" src="{{ asset('images/avatar_placeholder.png') }}" alt="avatar" width="72" height="72" />
+                            <div class="row text-end d-flex">
+                                <div class="col-xl-12 d-flex align-items-center">
+                                    <h4 class="comment-author text-start">{{ comment.user.firstName ~ ' ' ~ comment.user.lastName }}</h4>
+                                    <span class="font-monospace comment-date">{{ comment.creationDate|date("F j, Y") }}</span>
+                                </div>
+                                <div class="col-xl-11 col-xxl-12 text-break text-start d-flex align-items-xxl-center">
+                                    <p class="text-break text-start comment-content">
+                                        {{ comment.content }}
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </main>
+{% endblock %}
