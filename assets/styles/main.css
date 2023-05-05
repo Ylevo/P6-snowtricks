@@ -1,6 +1,28 @@
+#content-wrapper {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+main {
+    flex-grow: 1;
+}
+
+footer {
+    flex-shrink: 0;
+    flex-grow: 0;
+}
+
 #background {
-    max-height: 750px;
+    max-height: 800px;
     width: 100%;
+    background-image: url('../../public/images/banner.jpg');
+    background-size: cover;
+    color: rgba(9, 162, 255, 0.85);
+}
+
+.page-footer {
+    padding-top: 0 !important;
 }
 
 #more-tricks-alert, #more-comments-alert{
@@ -25,6 +47,16 @@ img.trick_list_img {
 
 a {
     text-decoration: none !important;
+}
+
+#goToTricksArrow {
+    position: absolute;
+    right: 0;
+    z-index: 10;
+    bottom: 0;
+    margin-right: 10px;
+    margin-bottom: 10px;
+    cursor:pointer;
 }
 
 #loading-spinner{

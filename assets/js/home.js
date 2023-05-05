@@ -1,4 +1,7 @@
 $(function() {
+    $("#goToTricksArrow").click(function(){
+        document.getElementById("tricks-list").scrollIntoView({behavior : 'smooth', block: "start", inline: "nearest"});
+    });
     $("#more-tricks-btn").click(function(){
         let page = $(this).data("page");
         let self = this;

@@ -1,0 +1,28 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Snowtricks - Reset your password{% endblock %}
+
+{% block body %}
+    <main class="page">
+        <section class="clean-block clean-form dark">
+            <div class="container">
+                <div class="block-heading">
+                    <h2 class="text-info">Reset your password</h2>
+                    {% for flash_error in app.flashes('reset_password_error') %}
+                        <div class="alert alert-danger" role="alert">{{ flash_error }}</div>
+                    {% endfor %}
+                </div>
+                {{ form_start(requestForm) }}
+                {{ form_row(requestForm.email) }}
+                <div>
+                    <small>
+                        Enter your email address and we will send you a
+                        link to reset your password.
+                    </small>
+                </div>
+                <button class="btn btn-primary mt-3">Send password reset email</button>
+                {{ form_end(requestForm) }}
+            </div>
+        </section>
+    </main>
+{% endblock %}
