@@ -31,11 +31,12 @@ class EditTrickController extends AbstractController
                               ImageUploader $imageUploader,
                               TrickService $trickService): Response
     {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+
         $form = $this->createForm(TrickFormType::class, $trick);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
             $imageMediasListFromForm = $form->get('imageMedias');
 
             try {

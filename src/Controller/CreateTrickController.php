@@ -29,6 +29,8 @@ class CreateTrickController extends AbstractController
                              ImageUploader $imageUploader,
                              TrickService $trickService): Response
     {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+
         $trick = new Trick();
         $trick->setMediaCover($mediaRepository->findOneBy(['url' => 'default_cover.jpeg']));
 
@@ -36,7 +38,6 @@ class CreateTrickController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
             $trick->setUser($this->getUser());
             $imageMediasListFromForm = $form->get('imageMedias');
 

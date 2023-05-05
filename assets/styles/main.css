@@ -1,0 +1,20 @@
+#background {
+    max-height: 750px;
+    width: 100%;
+}
+
+img.trick_list_img {
+    max-height: 125px;
+}
+
+.alert-success {
+    margin-bottom: 0 !important;
+}
+
+.invalid-feedback {
+    width: initial !important;
+}
+
+.fit-cover {
+    object-fit: cover;
+}

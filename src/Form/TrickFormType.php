@@ -34,19 +34,11 @@ class TrickFormType extends AbstractType
     {
         $builder
             ->add('name', TextType::class, [
-                'constraints' => [
-                    new NotBlank([
-                        'message' => 'A trick needs a name.',
-                    ])
-                ],
-                'label' => false
+                'label' => false,
+                'empty_data' => ''
             ])
             ->add('description', TextareaType::class, [
-                'constraints' => [
-                    new NotBlank([
-                        'message' => 'A trick needs a description',
-                    ])
-                ]
+                'empty_data' => ''
             ])
             ->add('category', EntityType::class, [
                 'class' => TrickCategory::class,

@@ -4,14 +4,22 @@
         <a href="#" class="remove-media-entry"><i class="far fa-trash-alt fs-5"></i></a>
 
         {% if (mediaType == 'image' and isNewMedia) %}
-            <div class="field align-items-center"> {{ form_label(media.image) }} {{ form_widget(media.image) }} </div>
+            <div class="field align-items-center"> {{ form_label(media.image) }} {{ form_widget(media.image,
+                    {'attr':
+                        {'accept': ".jpg, .jpeg, .png"}
+                    })
+                }}
+            </div>
             {{ form_errors(media.image) }}
             <div class="field align-items-center"> {{ form_label(media.altText) }} {{ form_widget(media.altText) }} </div>
+            {{ form_errors(media.altText) }}
         {% else %}
             <div class="field align-items-center"> {{ form_label(media.url) }} {{ form_widget(media.url) }} </div>
             {{ form_errors(media.url) }}
             <div class="field align-items-center"> {{ form_label(media.altText) }} {{ form_widget(media.altText) }} </div>
+            {{ form_errors(media.altText) }}
             <div class="field align-items-center"> {{ form_label(media.type) }} {{ form_widget(media.type) }} </div>
+            {{ form_errors(media.type) }}
         {% endif %}
 
         <hr>

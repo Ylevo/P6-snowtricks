@@ -11,7 +11,8 @@
         <div id="trick-wrapper">
             {% include('layouts/home_banner.html.twig') %}
             <div id="trick-container">
-                {{ form_row(form.name, {'attr': {'placeholder': 'Trick Name', 'class': 'text-center'}}) }}
+                {{ form_widget(form.name, {'attr': {'placeholder': 'Trick Name', 'class': 'text-center'}}) }}
+                {{ form_errors(form.name) }}
                 <div id="cover-wrapper">
                     <img id="trick-cover" class="w-100 d-block fit-cover" alt="{{ trick.mediaCover.altText }}"
                          src="{{ asset('images/tricks/' ~ trick.mediaCover.url) }}"
