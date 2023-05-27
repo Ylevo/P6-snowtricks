@@ -31,7 +31,7 @@ $(function() {
         $(this).closest(".media-entry").fadeOut().remove();
     });
 
-    $("a.delete-trick-button").click(function(){
+    $("body").on('click', 'a.delete-trick-button', function(){
         let url = $(this).data('url');
         $("#modal-delete-confirm").prop('href', url);
     })
