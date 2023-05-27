@@ -5,6 +5,7 @@
                 <li class="nav-item"><a class="nav-link active" href="/">Home</a></li>
                 {% if is_granted('IS_AUTHENTICATED_FULLY') %}
                     <li class="nav-item"><a class="nav-link" href="/new-trick">Create a new trick</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/logout">Logout</a></li>
                 {% else %}
                     <li class="nav-item"><a class="nav-link" href="/login">Login</a></li>
                     <li class="nav-item"><a class="nav-link" href="/register">Register</a></li>

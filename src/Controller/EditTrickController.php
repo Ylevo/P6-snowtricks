@@ -58,7 +58,8 @@ class EditTrickController extends AbstractController
 
         return $this->render('layouts/create_edit_trick.html.twig', [
             'form' => $form->createView(),
-            'trick' => $trick
+            'trick' => $trick,
+            'formName' => 'Edit'
         ]);
     }
 }
