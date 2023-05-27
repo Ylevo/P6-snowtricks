@@ -21,7 +21,7 @@ class GetMoreCommentsController extends AbstractController
         $moreComments = $commentRepository->findBy(['trick' => $trick],['creationDate' => 'DESC'], 5, ($page * 5));
         $data = $serializer->normalize($moreComments, null, [
             'enable_max_depth' => true,
-            'circular_reference_handler' => function ($object) {
+            'circular_reference_handler' => function (mixed $object) {
                 return $object->getId();
             },
         ]);

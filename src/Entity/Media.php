@@ -18,7 +18,6 @@ class Media
     #[ORM\Column]
     private ?int $id = null;
 
-    #[Assert\NotBlank(['message' => 'Media\'s url or filename is missing.'])]
     #[ORM\Column(length: 255)]
     private ?string $url = null;
 
