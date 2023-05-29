@@ -53,7 +53,7 @@ class Trick
     private ?User $user = null;
 
     #[MaxDepth(1)]
-    #[ORM\OneToMany(mappedBy: 'trick', targetEntity: Comment::class, fetch: 'EXTRA_LAZY')]
+    #[ORM\OneToMany(mappedBy: 'trick', targetEntity: Comment::class,  cascade: ['remove'], fetch: 'EXTRA_LAZY')]
     #[ORM\OrderBy(['creationDate' => "DESC"])]
     private Collection $comments;
 
