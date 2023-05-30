@@ -50,7 +50,7 @@ class TrickService {
             $name = mb_substr($name, 0, $limit, "utf-8");
         }
 
-        $tempSlug = $this->slugger->slug($name);
+        $tempSlug = $this->slugger->slug($name)->lower();
         $suffix = 1;
         $slugged = $tempSlug;
         while($this->trickRepository->checkIfSlugAlreadyExists($slugged, $trickId))
