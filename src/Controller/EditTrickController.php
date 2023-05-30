@@ -48,6 +48,7 @@ class EditTrickController extends AbstractController
             }
 
             $trickService->handleVideoMedias($trick);
+            $trickService->slugify($trick);
 
             $entityManager->persist($trick);
             $entityManager->flush();

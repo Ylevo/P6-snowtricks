@@ -15,7 +15,8 @@
                                 <a href="{{ path('app_trick_show', {
                                     slug: trick.slug
                                 }) }}">
-                                    <img class="card-img-top w-100 d-block fit-cover trick_list_img" alt="{{ trick.mediaCover.altText }}" src="{{ asset('images/tricks/' ~ trick.mediaCover.url) }}" />
+                                    <img class="card-img-top w-100 d-block fit-cover trick_list_img" alt="{{ trick.mediaCover.altText }}"
+                                         src="{{ trick.mediaCover.url is not null ? asset('images/tricks/thumbnails/' ~ trick.mediaCover.url) : asset('images/tricks/thumbnails/default_cover.jpg') }}" />
                                 </a>
                                 <div class="card-body">
                                     <p class="text-primary d-flex justify-content-around align-items-center card-text mb-0">

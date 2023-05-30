@@ -19,12 +19,7 @@ class GetMoreCommentsController extends AbstractController
     public function getMoreComments(CommentRepository $commentRepository, SerializerInterface $serializer, Trick $trick, int $page): JsonResponse
     {
         $moreComments = $commentRepository->findBy(['trick' => $trick],['creationDate' => 'DESC'], 5, ($page * 5));
-        $data = $serializer->normalize($moreComments, null, [
-            'enable_max_depth' => true,
-            'circular_reference_handler' => function (mixed $object) {
-                return $object->getId();
-            },
-        ]);
+        $data = $serializer->normalize($moreComments, 'json', ['groups' => 'commentsPagination']);
         return $this->json(['comments' => $data,
                             'numberOfCommentsReturned' => sizeof($moreComments)]);
     }

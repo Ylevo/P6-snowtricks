@@ -5,11 +5,12 @@ namespace App\Entity;
 use App\Repository\CommentRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Serializer\Annotation\MaxDepth;
 use Symfony\Component\Validator\Constraints as Assert;
-use Gedmo\Mapping\Annotation\Timestampable;
 
 #[ORM\Entity(repositoryClass: CommentRepository::class)]
+#[ORM\HasLifecycleCallbacks]
 class Comment
 {
     #[ORM\Id]
@@ -19,20 +20,20 @@ class Comment
 
     #[Assert\NotBlank(['message' => 'Comment cannot be empty.'])]
     #[ORM\Column(type: Types::TEXT)]
+    #[Groups('commentsPagination')]
     private ?string $content = null;
 
-    #[Timestampable(on: 'create')]
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    #[Groups('commentsPagination')]
     private ?\DateTimeInterface $creationDate = null;
 
-    #[MaxDepth(1)]
     #[ORM\ManyToOne(inversedBy: 'comments')]
     #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')]
     private ?Trick $trick = null;
 
-    #[MaxDepth(1)]
     #[ORM\ManyToOne(inversedBy: 'comments')]
     #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')]
+    #[Groups('commentsPagination')]
     private ?User $user = null;
 
     public function getId(): ?int
@@ -86,5 +87,14 @@ class Comment
         $this->user = $user;
 
         return $this;
+    }
+
+    #[ORM\PrePersist]
+    public function updateTimestamp() : void
+    {
+        if ($this->getCreationDate() == null)
+        {
+            $this->setCreationDate(new \DateTime());
+        }
     }
 }
