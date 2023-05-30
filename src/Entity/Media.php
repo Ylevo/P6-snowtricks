@@ -7,10 +7,11 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
-use Gedmo\Mapping\Annotation\Timestampable;
 
 #[ORM\Entity(repositoryClass: MediaRepository::class)]
+#[ORM\HasLifecycleCallbacks]
 class Media
 {
     #[ORM\Id]
@@ -19,17 +20,17 @@ class Media
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups('tricksPagination')]
     private ?string $url = null;
 
     #[Assert\NotBlank(['message' => 'Alternative text is required.'])]
     #[ORM\Column(length: 255)]
+    #[Groups('tricksPagination')]
     private ?string $altText = null;
 
-    #[Timestampable(on: 'create')]
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $creationDate = null;
 
-    #[Timestampable(on: 'update')]
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $lastModified = null;
 
@@ -135,5 +136,17 @@ class Media
         }
 
         return $this;
+    }
+
+    #[ORM\PrePersist]
+    #[ORM\PreUpdate]
+    public function updateTimestamps() : void
+    {
+        $this->setLastModified(new \DateTime());
+
+        if ($this->getCreationDate() == null)
+        {
+            $this->setCreationDate(new \DateTime());
+        }
     }
 }

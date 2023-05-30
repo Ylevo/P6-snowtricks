@@ -21,6 +21,12 @@ class TrickRepository extends ServiceEntityRepository
         parent::__construct($registry, Trick::class);
     }
 
+    public function checkIfSlugAlreadyExists(string $slug, int $id) : bool
+    {
+        $trick = $this->findOneBy(['slug' => $slug]);
+        return $trick != null && $trick->getId() != $id;
+    }
+
     public function save(Trick $entity, bool $flush = false): void
     {
         $this->getEntityManager()->persist($entity);

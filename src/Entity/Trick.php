@@ -3,26 +3,29 @@
 namespace App\Entity;
 
 use App\Repository\TrickRepository;
+use App\Service\TrickService;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-use Gedmo\Mapping\Annotation\Slug;
-use Gedmo\Mapping\Annotation\Timestampable;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Serializer\Annotation\MaxDepth;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints\NotBlank;
 
 #[ORM\Entity(repositoryClass: TrickRepository::class)]
+#[ORM\HasLifecycleCallbacks]
 class Trick
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups('tricksPagination')]
     private ?int $id = null;
 
     #[Assert\NotBlank(['message' => 'The name is missing.'])]
     #[ORM\Column(length: 255)]
+    #[Groups('tricksPagination')]
     private ?string $name = null;
 
     #[Assert\NotBlank(['message' => 'The description is missing.'])]
@@ -30,35 +33,29 @@ class Trick
     private ?string $description = null;
 
     #[ORM\Column(length: 255, unique: true)]
-    #[Slug(fields: ['name'])]
+    #[Groups('tricksPagination')]
     private ?string $slug = null;
 
-    #[Timestampable(on: 'create')]
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $creationDate = null;
 
-    #[Timestampable(on: 'update')]
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $lastModified = null;
 
     #[Assert\NotBlank(['message' => 'The category is missing.'])]
-    #[MaxDepth(1)]
     #[ORM\ManyToOne(inversedBy: 'tricks')]
     #[ORM\JoinColumn(nullable: false)]
     private ?TrickCategory $category = null;
 
     #[ORM\ManyToOne(inversedBy: 'tricks')]
-    #[MaxDepth(1)]
     #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')]
     private ?User $user = null;
 
-    #[MaxDepth(1)]
     #[ORM\OneToMany(mappedBy: 'trick', targetEntity: Comment::class, fetch: 'EXTRA_LAZY')]
     #[ORM\OrderBy(['creationDate' => "DESC"])]
     private Collection $comments;
 
     #[Assert\Valid]
-    #[MaxDepth(1)]
     #[ORM\ManyToMany(targetEntity: Media::class, inversedBy: 'tricks', cascade: ['persist'])]
     private Collection $medias;
 
@@ -68,9 +65,9 @@ class Trick
     #[Assert\Valid]
     private Collection $videoMedias;
 
-    #[MaxDepth(1)]
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: true)]
+    #[Groups('tricksPagination')]
     private ?Media $mediaCover = null;
 
     public function __construct()
@@ -282,5 +279,17 @@ class Trick
         $this->mediaCover = $mediaCover;
 
         return $this;
+    }
+
+    #[ORM\PrePersist]
+    #[ORM\PreUpdate]
+    public function updateTimestamps() : void
+    {
+        $this->setLastModified(new \DateTime());
+
+        if ($this->getCreationDate() == null)
+        {
+            $this->setCreationDate(new \DateTime());
+        }
     }
 }

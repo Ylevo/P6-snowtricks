@@ -32,7 +32,7 @@ class CreateTrickController extends AbstractController
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
         $trick = new Trick();
-        $trick->setMediaCover($mediaRepository->findOneBy(['url' => 'default_cover.jpeg']));
+        $trick->setMediaCover($mediaRepository->findOneBy(['url' => 'default_cover.jpg']));
 
         $form = $this->createForm(TrickFormType::class, $trick);
         $form->handleRequest($request);
@@ -50,6 +50,7 @@ class CreateTrickController extends AbstractController
             }
 
             $trickService->handleVideoMedias($trick);
+            $trickService->slugify($trick);
 
             $entityManager->persist($trick);
             $entityManager->flush();

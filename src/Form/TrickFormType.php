@@ -7,6 +7,7 @@ use App\Entity\Trick;
 use App\Entity\TrickCategory;
 use App\Entity\User;
 use App\Repository\MediaRepository;
+use App\Repository\MediaTypeRepository;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\ChoiceList\ChoiceList;
@@ -24,11 +25,9 @@ use Symfony\Component\Validator\Constraints\NotBlank;
 
 class TrickFormType extends AbstractType
 {
-    private $mediaRepository;
 
-    public function __construct(MediaRepository $mediaRepository)
+    public function __construct(private MediaRepository $mediaRepository, private MediaTypeRepository $mediaTypeRepository)
     {
-        $this->mediaRepository = $mediaRepository;
     }
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
@@ -47,7 +46,7 @@ class TrickFormType extends AbstractType
             ->add('mediaCover', EntityType::class, [
                 'class' => Media::class,
                 'choice_label' => 'url',
-                'choices' => $this->mediaRepository->findBy(['type' => '1']),
+                'choices' => $this->mediaRepository->findBy(['type' => $this->mediaTypeRepository->findOneBy(['name' => 'image'])]),
                 'label' => false
             ])
             ->add('imageMedias', CollectionType::class, [

@@ -13,7 +13,7 @@
                 <h2>{{ trick.name }}</h2>
                 <div id="cover-wrapper">
                     <img id="trick-cover" class="w-100 d-block fit-cover" alt="{{ trick.mediaCover.altText }}"
-                         src="{{ trick.mediaCover.url is not null ? asset('images/tricks/' ~ trick.mediaCover.url) : asset('images/tricks/default_cover.jpeg') }}"
+                         src="{{ trick.mediaCover.url is not null ? asset('images/tricks/' ~ trick.mediaCover.url) : asset('images/tricks/default_cover.jpg') }}"
                     />
                     {% if is_granted('IS_AUTHENTICATED_FULLY') %}
                         <div class="d-flex justify-content-evenly" id="trick-cover-buttons">
@@ -46,7 +46,6 @@
                                     src="{{ 'http://img.youtube.com/vi/' ~ media.url|split('/watch?v=')|last ~ '/default.jpg' }}"
                                 {% elseif media.type.name == 'vimeo' %}
                                     src="{{ 'https://vumbnail.com/' ~ media.url|split('/')|last ~ '.jpg'}}"
-
                                 {% endif %}
                                 alt="{{ media.altText }}"/>
                             {% endif %}

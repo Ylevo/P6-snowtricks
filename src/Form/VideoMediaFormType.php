@@ -40,7 +40,7 @@ class VideoMediaFormType extends AbstractType
             ->add('url', UrlType::class, [
                 'constraints' => [
                     new Regex(['pattern' => '(https:\/\/(www.)?youtube.com\/watch\?v=|https:\/\/vimeo.com\/)',
-                        'message' =>  'URL should be of the pattern https://www.youtube.com/watch?v= or https://vimeo.com/'])
+                        'message' =>  'URL should be of the format https://www.youtube.com/watch?v= or https://vimeo.com/'])
                 ]
             ])
             ->add('altText', TextType::class)
