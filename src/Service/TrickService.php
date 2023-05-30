@@ -8,12 +8,14 @@ use App\Repository\MediaTypeRepository;
 use App\Repository\TrickRepository;
 use App\Service\ImageUploader;
 use \Symfony\Component\Form\FormInterface;
+use Symfony\Component\String\Slugger\SluggerInterface;
 
 class TrickService {
 
     public function __construct(private MediaTypeRepository $mediaTypeRepository,
                                 private ImageUploader $imageUploader,
-                                private TrickRepository $trickRepository
+                                private TrickRepository $trickRepository,
+                                private SluggerInterface $slugger
     ){
     }
 
@@ -45,19 +47,15 @@ class TrickService {
         $trickId = $trick->getId() ?? -1;
 
         if ($limit) {
-            $str = mb_substr($name, 0, $limit, "utf-8");
+            $name = mb_substr($name, 0, $limit, "utf-8");
         }
-        $slug = html_entity_decode($name, ENT_QUOTES, 'UTF-8');
-        // replace non letter or digits by -
-        $slug = preg_replace('~[^\\pL\d]+~u', '-', $slug);
-        // trim
-        $slug = trim($slug, '-');
-        $slug = strtolower($slug);
+
+        $tempSlug = $this->slugger->slug($name);
         $suffix = 1;
-        $slugged = $slug;
+        $slugged = $tempSlug;
         while($this->trickRepository->checkIfSlugAlreadyExists($slugged, $trickId))
         {
-            $slugged = $slug . '-' . $suffix;
+            $slugged = $tempSlug . '-' . $suffix;
             $suffix++;
         }
 
