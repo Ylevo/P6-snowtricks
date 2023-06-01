@@ -31,3 +31,7 @@ services:
     App\Service\Thumbnailer:
         bind:
             string $thumbnailFolder: '%tricks.thumbnail.directory%'
+
+    App\Service\TokenGenerator:
+        bind:
+            string $signingKey: '%kernel.secret%'

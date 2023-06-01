@@ -3,49 +3,50 @@
 namespace App\Security;
 
 use App\Entity\User;
+use App\Exception\ExpiredLinkException;
+use App\Exception\InvalidLinkException;
+use App\Exception\WrongEmailVerifyException;
 use App\Repository\UserRepository;
+use App\Service\TokenGenerator;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Mailer\MailerInterface;
-use Symfony\Component\Security\Core\Exception\UserNotFoundException;
 use Symfony\Component\Security\Core\User\UserInterface;
-use SymfonyCasts\Bundle\VerifyEmail\Exception\VerifyEmailExceptionInterface;
-use SymfonyCasts\Bundle\VerifyEmail\Exception\WrongEmailVerifyException;
-use SymfonyCasts\Bundle\VerifyEmail\VerifyEmailHelperInterface;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Symfony\Component\HttpKernel\UriSigner;
 
 class EmailVerifier
 {
     public function __construct(
-        private VerifyEmailHelperInterface $verifyEmailHelper,
         private MailerInterface $mailer,
         private EntityManagerInterface $entityManager,
-        private UserRepository $userRepository
+        private UserRepository $userRepository,
+        private TokenGenerator $tokenGenerator,
+        private UrlGeneratorInterface $router,
+        private UriSigner $uriSigner
     ) {
     }
 
     public function sendEmailConfirmation(string $verifyEmailRouteName, UserInterface $user, TemplatedEmail $email): void
     {
-        $signatureComponents = $this->verifyEmailHelper->generateSignature(
-            $verifyEmailRouteName,
-            $user->getId(),
-            $user->getEmail(),
-            ['id' => $user->getId()]
-        );
+        $expiresAt = time() + 3600;
+        $token = $this->tokenGenerator->createToken($user->getId(), $user->getEmail());
+        $uri = $this->router->generate($verifyEmailRouteName, [
+            'id' => $user->getId(),
+            'expires' => $expiresAt,
+            'token' => $token ], UrlGeneratorInterface::ABSOLUTE_URL);
+
+        $signedUrl = $this->uriSigner->sign($uri);
 
         $context = $email->getContext();
-        $context['signedUrl'] = $signatureComponents->getSignedUrl();
-        $context['expiresAtMessageKey'] = $signatureComponents->getExpirationMessageKey();
-        $context['expiresAtMessageData'] = $signatureComponents->getExpirationMessageData();
+        $context['signedUrl'] = $signedUrl;
 
         $email->context($context);
 
         $this->mailer->send($email);
     }
 
-    /**
-     * @throws VerifyEmailExceptionInterface
-     */
     public function handleEmailConfirmation(Request $request): User
     {
         $user = $this->userRepository->find($request->query->get('id'));
@@ -53,7 +54,20 @@ class EmailVerifier
             throw new WrongEmailVerifyException();
         }
 
-        $this->verifyEmailHelper->validateEmailConfirmation($request->getUri(), $user->getId(), $user->getEmail());
+        if (!$this->uriSigner->check($request->getUri())) {
+            throw new InvalidLinkException();
+        }
+
+        if ($request->query->get('expires') <= time()) {
+            throw new ExpiredLinkException();
+        }
+
+        $knownToken = $this->tokenGenerator->createToken($user->getId(), $user->getEmail());
+        $emailToken = $request->query->get('token');
+
+        if (!hash_equals($knownToken, $emailToken)) {
+            throw new WrongEmailVerifyException();
+        }
 
         $user->setIsVerified(true);
 
