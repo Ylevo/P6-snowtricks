@@ -53,7 +53,7 @@ class TrickService {
         $tempSlug = $this->slugger->slug($name)->lower();
         $suffix = 1;
         $slugged = $tempSlug;
-        while($this->trickRepository->checkIfSlugAlreadyExists($slugged, $trickId))
+        while ($this->trickRepository->checkIfSlugAlreadyExists($slugged, $trickId))
         {
             $slugged = $tempSlug . '-' . $suffix;
             $suffix++;
