@@ -3,11 +3,9 @@
 namespace App\Repository;
 
 use App\Entity\ResetPasswordRequest;
+use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
-use SymfonyCasts\Bundle\ResetPassword\Model\ResetPasswordRequestInterface;
-use SymfonyCasts\Bundle\ResetPassword\Persistence\Repository\ResetPasswordRequestRepositoryTrait;
-use SymfonyCasts\Bundle\ResetPassword\Persistence\ResetPasswordRequestRepositoryInterface;
 
 /**
  * @extends ServiceEntityRepository<ResetPasswordRequest>
@@ -17,9 +15,8 @@ use SymfonyCasts\Bundle\ResetPassword\Persistence\ResetPasswordRequestRepository
  * @method ResetPasswordRequest[]    findAll()
  * @method ResetPasswordRequest[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class ResetPasswordRequestRepository extends ServiceEntityRepository implements ResetPasswordRequestRepositoryInterface
+class ResetPasswordRequestRepository extends ServiceEntityRepository
 {
-    use ResetPasswordRequestRepositoryTrait;
 
     public function __construct(ManagerRegistry $registry)
     {
@@ -44,8 +41,32 @@ class ResetPasswordRequestRepository extends ServiceEntityRepository implements 
         }
     }
 
-    public function createResetPasswordRequest(object $user, \DateTimeInterface $expiresAt, string $selector, string $hashedToken): ResetPasswordRequestInterface
+    public function createResetPasswordRequest(User $user, \DateTimeInterface $expiresAt, string $selector, string $hashedToken): ResetPasswordRequest
     {
         return new ResetPasswordRequest($user, $expiresAt, $selector, $hashedToken);
+    }
+
+    public function persistResetPasswordRequest(ResetPasswordRequest $resetPasswordRequest): void
+    {
+        $this->getEntityManager()->persist($resetPasswordRequest);
+        $this->getEntityManager()->flush();
+    }
+
+    public function checkIfResetAlreadyRequested(int $userId) : bool
+    {
+        return $this->findOneBy(['user' => $userId]) != null;
+    }
+
+    public function removeExpiredResetPasswordRequests(): void
+    {
+        $time = new \DateTimeImmutable('-1 hour');
+        $query = $this->createQueryBuilder('t')
+            ->delete()
+            ->where('t.expiresAt <= :time')
+            ->setParameter('time', $time)
+            ->getQuery()
+        ;
+
+        $query->execute();
     }
 }
