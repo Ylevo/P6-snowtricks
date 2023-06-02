@@ -31,7 +31,7 @@ class EmailVerifier
     public function sendEmailConfirmation(string $verifyEmailRouteName, UserInterface $user, TemplatedEmail $email): void
     {
         $expiresAt = time() + 3600;
-        $token = $this->tokenGenerator->createToken($user->getId(), $user->getEmail());
+        $token = $this->tokenGenerator->createVerifEmailToken($user->getId(), $user->getEmail());
         $uri = $this->router->generate($verifyEmailRouteName, [
             'id' => $user->getId(),
             'expires' => $expiresAt,
@@ -62,7 +62,7 @@ class EmailVerifier
             throw new ExpiredLinkException();
         }
 
-        $knownToken = $this->tokenGenerator->createToken($user->getId(), $user->getEmail());
+        $knownToken = $this->tokenGenerator->createVerifEmailToken($user->getId(), $user->getEmail());
         $emailToken = $request->query->get('token');
 
         if (!hash_equals($knownToken, $emailToken)) {

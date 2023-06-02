@@ -8,7 +8,7 @@
             <div class="container">
                 <div class="block-heading">
                     <h2 class="text-info">Reset your password</h2>
-                    {% for flash_error in app.flashes('reset_password_error') %}
+                    {% for flash_error in app.flashes('error') %}
                         <div class="alert alert-danger" role="alert">{{ flash_error }}</div>
                     {% endfor %}
                 </div>
