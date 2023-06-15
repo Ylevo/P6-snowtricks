@@ -8,7 +8,7 @@ services:
     command: --init-file /data/application/init.sql
     restart: always
     volumes:
-      - ~/mysql:/var/lib/mysql
+      - ./var/mysql:/var/lib/mysql
       - ./dump/init.sql:/data/application/init.sql
     environment:
       MYSQL_ROOT_PASSWORD: admin
